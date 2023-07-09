@@ -3,5 +3,5 @@ name: foundryvtt-containerized
 description: Helm chart to deploy foundryvtt-containerized
 type: application
 
-version: 0.0.3
+version: 0.0.4
 appVersion: "v0.0.4"
