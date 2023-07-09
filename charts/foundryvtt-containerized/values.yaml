@@ -38,12 +38,13 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext:
+  # foundryvtt-containerized runs as user 1000 by default
+  runAsUser: 1000
   # runAsNonRoot: true
   # capabilities:
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
