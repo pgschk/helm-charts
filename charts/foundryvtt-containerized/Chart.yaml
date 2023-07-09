@@ -1,0 +1,7 @@
+apiVersion: v2
+name: foundryvtt-containerized
+description: Helm chart to deploy foundryvtt-containerized
+type: application
+
+version: 0.0.1
+appVersion: "v0.0.2"

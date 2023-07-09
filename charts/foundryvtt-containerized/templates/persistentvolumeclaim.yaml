@@ -1,0 +1,28 @@
+{{ if eq .Values.persistence.enabled true -}}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: foundryvtt-data
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.persistence.dataSize | default "20Gi" }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: foundryvtt-install
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage:  {{ .Values.persistence.installSize | default "2Gi" }}
+{{ end -}}
