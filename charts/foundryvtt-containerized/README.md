@@ -38,3 +38,4 @@ helm delete my-foundryvtt-containerized
 | `persistence.installSize` | Size of the volume for the FoundryVTT installation as Kubernetes quantinty                    | 2Gi         |
 | `persistence.dataSize`    | Size of the volume for your FoundryVTT data as Kubernetes quantinty                           | 20Gi        |
 
+You can find additional values in [values.yaml](values.yaml)
