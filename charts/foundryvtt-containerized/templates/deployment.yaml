@@ -34,7 +34,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          {{- if not empty .Values.foundryVTTDownloadURL }}
+          {{- if not (empty .Values.foundryVTTDownloadURL) }}
             - name: FOUNDRYVTT_DOWNLOAD_URL
               value: {{ .Values.foundryVTTDownloadURL | quote }}
           {{- end }}
