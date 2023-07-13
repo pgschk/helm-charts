@@ -10,7 +10,7 @@ Helm's [documentation](https://helm.sh/docs) to get started.
 Once Helm has been set up correctly, add the repo as follows:
 
 ```
-helm repo add pgschk https://pgschk.github.io/helm-charts
+helm repo add pgschk https://helm.gschk.de
 ```
 
 If you had already added this repo earlier, run `helm repo update` to retrieve
