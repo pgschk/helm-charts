@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   foundryvtt-containerized:
   - apiVersion: v2
+    appVersion: v0.0.5
+    created: "2023-10-07T15:14:31.603291282Z"
+    description: Helm chart to deploy foundryvtt-containerized
+    digest: 5563c93d0ec8ca5d35d00e3b84cb67fcc945fbf13707e6d66fe4bd97aae1494f
+    name: foundryvtt-containerized
+    type: application
+    urls:
+    - https://github.com/pgschk/helm-charts/releases/download/foundryvtt-containerized-0.0.6/foundryvtt-containerized-0.0.6.tgz
+    version: 0.0.6
+  - apiVersion: v2
     appVersion: v0.0.4
     created: "2023-07-13T17:21:33.690937484Z"
     description: Helm chart to deploy foundryvtt-containerized
@@ -41,4 +51,4 @@ entries:
     urls:
     - https://github.com/pgschk/helm-charts/releases/download/foundryvtt-containerized-0.0.2/foundryvtt-containerized-0.0.2.tgz
     version: 0.0.2
-generated: "2023-07-13T17:21:33.690951385Z"
+generated: "2023-10-07T15:14:31.603308982Z"
