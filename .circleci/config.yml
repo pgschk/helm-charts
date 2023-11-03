@@ -36,7 +36,9 @@ jobs:
             ls -la
             for dir in "."/*; do
               if [ -d "$dir" ]; then
-                helm upgrade -i "${dir:2}" "./$dir"
+                if [ -x "${dir}/test.sh" ];
+                  "${dir}/test.sh"
+                fi
               fi  
             done
 workflows:
