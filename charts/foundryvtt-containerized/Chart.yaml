@@ -2,6 +2,9 @@ apiVersion: v2
 name: foundryvtt-containerized
 description: Helm chart to deploy foundryvtt-containerized
 type: application
+maintainers:
+  - name: Philipp Geschke
+    email: pgeschke@gmail.com
 
-version: 0.0.6
+version: 0.0.7
 appVersion: "v0.0.5"
