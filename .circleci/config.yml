@@ -1,0 +1,46 @@
+version: 2.1
+orbs:
+  helm: circleci/helm@3.0
+jobs:
+  chart-testing:
+    docker:
+      - image: quay.io/helmpack/chart-testing:v3.10.1-amd64
+    working_directory: /mnt/ramdisk
+    steps:
+      - checkout
+      - run: 
+          name: Lint all charts
+          command: |
+            ct lint --all
+  chart-install:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Install Minikube
+          command: |
+            MINIKUBE_BINARY_URL="https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
+            wget -O ./minikube "${MINIKUBE_BINARY_URL}"
+            chmod +x ./minikube
+      - run:
+          name: Spin up Minikube
+          command: |
+            ./minikube start --force
+            ./minikube kubectl -- cluster-info
+            ./minikube kubectl -- wait --for=condition=Ready pods --all --all-namespaces
+      - helm/install_helm_client
+      - run:
+          name: Run Tests
+          command: |
+            cd charts/
+            ls -la
+            for dir in "."/*; do
+              if [ -d "$dir" ]; then
+                helm upgrade -i "${dir:2}" "./$dir"
+              fi  
+            done
+workflows:
+  charts:
+    jobs:
+      - chart-testing
+      - chart-install
