@@ -3,7 +3,7 @@ name: foundryvtt-containerized
 description: Helm chart to deploy foundryvtt-containerized
 type: application
 maintainers:
-  - name: Philipp Geschke
+  - name: pgschk #Philipp Geschke
     email: pgeschke@gmail.com
     url: https://github.com/pgschk
 
