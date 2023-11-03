@@ -5,6 +5,7 @@ type: application
 maintainers:
   - name: Philipp Geschke
     email: pgeschke@gmail.com
+    url: https://github.com/pgschk
 
 version: 0.0.7
 appVersion: "v0.0.5"
