@@ -36,7 +36,7 @@ jobs:
             ls -la
             for dir in "."/*; do
               if [ -d "$dir" ]; then
-                if [ -x "${dir}/test.sh" ];
+                if [ -x "${dir}/test.sh" ]; then
                   "${dir}/test.sh"
                 fi
               fi  
