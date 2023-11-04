@@ -37,7 +37,7 @@ jobs:
             for dir in "."/*; do
               if [ -d "$dir" ]; then
                 if [ -x "${dir}/test.sh" ]; then
-                  cd "${dir}""; ./test.sh
+                  cd "${dir}"; ./test.sh
                   cd ..
                 fi
               fi  
