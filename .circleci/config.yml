@@ -22,12 +22,13 @@ jobs:
             MINIKUBE_BINARY_URL="https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64"
             wget -O ./minikube "${MINIKUBE_BINARY_URL}"
             chmod +x ./minikube
+            sudo install minikube /usr/local/bin/minikube
       - run:
           name: Spin up Minikube
           command: |
-            ./minikube start --force
-            ./minikube kubectl -- cluster-info
-            ./minikube kubectl -- wait --for=condition=Ready pods --all --all-namespaces
+            minikube start --force
+            minikube kubectl -- cluster-info
+            minikube kubectl -- wait --for=condition=Ready pods --all --all-namespaces
       - helm/install_helm_client
       - run:
           name: Run Tests
