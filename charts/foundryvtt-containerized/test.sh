@@ -19,5 +19,5 @@ echo -e "${OK_STRING} Chart installed"
 sleep 10
 helm uninstall foundryvtt-${INSTALL_ID}
 echo -e "${OK_STRING} Chart uninstalled"
-${KUBECTL} delete pvc foundryvtt-data foundryvtt-install
+${KUBECTL} delete pvc -lapp.kubernetes.io/instance=foundryvtt-${INSTALL_ID}
 echo -e "${OK_STRING} PVCs cleaned up"

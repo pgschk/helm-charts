@@ -60,10 +60,10 @@ spec:
       volumes:
       - name: foundryvtt-data
         persistentVolumeClaim:
-          claimName: foundryvtt-data
+          claimName: {{ include "foundryvtt-containerized.fullname" . }}-data
       - name: foundryvtt-install
         persistentVolumeClaim:
-          claimName: foundryvtt-install
+          claimName: {{ include "foundryvtt-containerized.fullname" . }}-install
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
