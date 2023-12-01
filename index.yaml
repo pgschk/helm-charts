@@ -2,6 +2,28 @@ apiVersion: v1
 entries:
   foundryvtt-containerized:
   - apiVersion: v2
+    appVersion: v0.1.1
+    created: "2023-12-01T20:14:26.758194895Z"
+    description: Helm chart to deploy foundryvtt-containerized
+    digest: bddc8504732df58bdb3045e5b45afe08ab9aeac55e5cad6724b785fd1576d7f9
+    keywords:
+    - foundryvtt
+    - foundry
+    - ttrpg
+    - dnd
+    - pathfinder
+    maintainers:
+    - email: pgeschke@gmail.com
+      name: pgschk
+      url: https://github.com/pgschk
+    name: foundryvtt-containerized
+    sources:
+    - https://github.com/pgschk/helm-charts/tree/main/charts/foundryvtt-containerized
+    type: application
+    urls:
+    - https://github.com/pgschk/helm-charts/releases/download/foundryvtt-containerized-0.0.11/foundryvtt-containerized-0.0.11.tgz
+    version: 0.0.11
+  - apiVersion: v2
     appVersion: v0.1.0
     created: "2023-12-01T17:20:02.974960868Z"
     description: Helm chart to deploy foundryvtt-containerized
@@ -122,4 +144,4 @@ entries:
     urls:
     - https://github.com/pgschk/helm-charts/releases/download/foundryvtt-containerized-0.0.2/foundryvtt-containerized-0.0.2.tgz
     version: 0.0.2
-generated: "2023-12-01T17:20:02.975000522Z"
+generated: "2023-12-01T20:14:26.758234478Z"
