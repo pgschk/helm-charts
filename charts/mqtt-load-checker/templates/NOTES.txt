@@ -1,0 +1,6 @@
+
+Deployed mqtt-load-generator in checker mode as {{ include "mqtt-load-checker.fullname" . }}
+
+{{- with .Values.mqtt | default dict }}
+Messages are subscribed to on the topic {{ .topic | default "/golang/pub" }} on MQTT broker {{ .hostname | default "mqtt" }} on port {{ .port | default "1833" }}.
+{{ end }}
