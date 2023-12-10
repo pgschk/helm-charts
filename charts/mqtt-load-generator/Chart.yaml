@@ -1,0 +1,17 @@
+apiVersion: v2
+name: mqtt-load-generator
+description: Helm chart to deploy github.com/pablitovicente/mqtt-load-generator
+type: application
+maintainers:
+  - name: pgschk  # Philipp Geschke
+    email: pgeschke@gmail.com
+    url: https://github.com/pgschk
+sources:
+  - "https://github.com/pgschk/helm-charts/tree/main/charts/mqtt-load-generator"
+keywords:
+  - mqtt-load-generator
+  - mqtt
+  - load-generator
+
+version: 0.1.0
+appVersion: "v1.0.5"

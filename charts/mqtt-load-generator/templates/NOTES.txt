@@ -1,0 +1,11 @@
+
+Job {{ include "mqtt-load-generator.fullname" . }} started with {{ .Values.parallelism | default 1 }} parallel pod(s) and will run to a total of {{ .Values.completions | default 1 }} completions.
+
+{{- with .Values.mqtt | default dict }}
+It will push {{ .msgPerClient | default "1000" }} messages per client using {{ .clients | default "100" }} clients per parallel pod.
+
+Messages are pushed to topic {{ .topic | default "/golang/pub" }} on MQTT broker {{ .hostname | default "mqtt" }} on port {{ .port | default "1833" }}.
+They are published with an interval of {{ .interval | default "1" }}ms per client with a size of {{ .msgSize | default "1000" }} bytes.
+{{ end }}
+The Job will be kept for {{ .Values.ttlSecondsAfterFinished | default 1800 }} seconds after finishing before automatically being cleaned up.
+If you want to restart the MQTT load generator before that, you need to first uninstall Helm release {{ .Release.Name }}.

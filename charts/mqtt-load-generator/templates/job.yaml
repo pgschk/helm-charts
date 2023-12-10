@@ -1,0 +1,70 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "mqtt-load-generator.fullname" . }}
+  labels:
+    {{- include "mqtt-load-generator.labels" . | nindent 4 }}
+spec:
+  completions: {{ .Values.completions | default 1 }} # how many runs of the mqtt-load-generator do you want to run
+  parallelism: {{ .Values.parallelism | default 1 }} # how many should run in parallel
+  ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished | default 1800 }} # how many seconds until the job is cleaned up
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+      {{- include "mqtt-load-generator.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mqtt-load-generator.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+      - name: {{ .Chart.Name }}
+        securityContext:
+          {{- toYaml .Values.securityContext | nindent 12 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+        {{- with .Values.mqtt | default dict }}
+        args:
+        - -h
+        - {{ .hostname | default "mqtt" | quote }} # hostname of mqtt server
+        - -p
+        - {{ .port | default "1833" | quote }} # port of mqtt server
+        - -u
+        - {{ .username | quote }} # username
+        - -P
+        - {{ .password | quote }} # password
+        - -c
+        - {{ .msgPerClient | default "1000" | quote }} # number of messages per client
+        - -s
+        - {{ .msgSize | default "1000" | quote }} # size per message in byte
+        - -t
+        - {{ .topic | default "/golang/pub" | quote }} # target topic to publish to
+        - -i
+        - {{ .interval | default "1" | quote }} # interval between published messages in ms
+        - -n
+        - {{ .clients | default "100" | quote }} # numer of parallel clients
+      {{- end }}
+      restartPolicy: {{ .Values.restartPolicy | default "Never" | quote }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  backoffLimit: {{ .Values.backoffLimit | default 5 }}
