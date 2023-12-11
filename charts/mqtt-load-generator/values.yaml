@@ -38,9 +38,9 @@ mqtt:
   # hostname of the MQTT broker to connect to
   hostname: "mqtt"
   # username to use for authentication at the MQTT broker
-  username: "admin"
+  username:
   # password to use for authentication at the MQTT broker
-  password: "admin"
+  password:
   # port to connect to on the MQTT broker
   port: 1883
   # topic on which generated messages will be published

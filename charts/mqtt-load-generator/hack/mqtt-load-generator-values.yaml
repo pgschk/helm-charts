@@ -1,3 +1,5 @@
 mqtt:
   hostname: vernemq
+  username: admin
+  password: admin
 ttlSecondsAfterFinished: 5

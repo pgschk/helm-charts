@@ -39,10 +39,14 @@ spec:
         - {{ .hostname | default "mqtt" | quote }} # hostname of mqtt server
         - -p
         - {{ .port | default "1833" | quote }} # port of mqtt server
+        {{- if not (empty .username) }}
         - -u
         - {{ .username | quote }} # username
+        {{- end }}
+        {{- if not (empty .password) }}
         - -P
         - {{ .password | quote }} # password
+        {{- end }}
         - -c
         - {{ .msgPerClient | default "1000" | quote }} # number of messages per client
         - -s
