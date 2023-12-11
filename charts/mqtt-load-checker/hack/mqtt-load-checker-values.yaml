@@ -1,2 +1,2 @@
 mqtt:
-  hostname: vernemq
+  hostname: mqtt
