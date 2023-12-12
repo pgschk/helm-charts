@@ -56,7 +56,12 @@ spec:
         - -i
         - {{ .interval | default "1" | quote }} # interval between published messages in ms
         - -n
-        - {{ .clients | default "100" | quote }} # numer of parallel clients
+        - {{ .clients | default "100" | quote }} # number of parallel clients
+        - -q
+        - {{ .qos | default "0" | quote }} # qos level to use
+        {{- if eq .suffix true }}
+        - -suffix
+        {{- end }}
       {{- end }}
       restartPolicy: {{ .Values.restartPolicy | default "Never" | quote }}
       {{- with .Values.nodeSelector }}
