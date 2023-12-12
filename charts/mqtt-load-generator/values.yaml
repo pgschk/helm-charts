@@ -54,6 +54,11 @@ mqtt:
   msgSize: 1000
   # interval of message publish per client
   interval: 1
+  # qos is the MQTT quality of services level
+  qos: 0
+  # suffix toggles optional sub-topic suffixes.
+  # setting to true adds integers as sub-topic to the publish topic, different for each client
+  suffix: false
 
 serviceAccount:
   # Specifies whether a service account should be created
