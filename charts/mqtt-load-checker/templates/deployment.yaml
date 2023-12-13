@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mqtt-load-checker.fullname" . }}
+  labels:
+    {{- include "mqtt-load-checker.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicas | default 1 }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "mqtt-load-checker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "mqtt-load-checker.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "mqtt-load-checker.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          command:
+          - /checker
+          {{- with .Values.mqtt | default dict }}
+          args:
+          - -h
+          - {{ .hostname | default "mqtt" | quote }} # hostname of mqtt server
+          - -p
+          - {{ .port | default "1833" | quote }} # port of mqtt server
+          - -u
+          - {{ .username | quote }} # username
+          - -P
+          - {{ .password | quote }} # password
+          - -t
+          - {{ .topic | default "/golang/pub" | quote }} # target topic to publish to
+          - --disable-bar # disable interactive bar
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
