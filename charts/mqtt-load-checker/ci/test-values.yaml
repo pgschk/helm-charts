@@ -1,0 +1,2 @@
+mqtt:
+  hostname: broker.emqx.io
