@@ -2,6 +2,28 @@ apiVersion: v1
 entries:
   foundryvtt-containerized:
   - apiVersion: v2
+    appVersion: 0.2.0
+    created: "2024-01-09T22:11:31.501059477Z"
+    description: Helm chart to deploy foundryvtt-containerized
+    digest: 9dfdc095a52e1c231d9dcd8b1b33da3977da1e557134a9203ce0da556782004d
+    keywords:
+    - foundryvtt
+    - foundry
+    - ttrpg
+    - dnd
+    - pathfinder
+    maintainers:
+    - email: pgeschke@gmail.com
+      name: pgschk
+      url: https://github.com/pgschk
+    name: foundryvtt-containerized
+    sources:
+    - https://github.com/pgschk/helm-charts/tree/main/charts/foundryvtt-containerized
+    type: application
+    urls:
+    - https://github.com/pgschk/helm-charts/releases/download/foundryvtt-containerized-0.0.13/foundryvtt-containerized-0.0.13.tgz
+    version: 0.0.13
+  - apiVersion: v2
     appVersion: v0.1.2
     created: "2023-12-22T10:04:04.970792469Z"
     description: Helm chart to deploy foundryvtt-containerized
@@ -251,4 +273,4 @@ entries:
     urls:
     - https://github.com/pgschk/helm-charts/releases/download/mqtt-load-generator-0.1.0/mqtt-load-generator-0.1.0.tgz
     version: 0.1.0
-generated: "2023-12-22T10:04:04.970855948Z"
+generated: "2024-01-09T22:11:31.501117686Z"
