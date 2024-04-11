@@ -234,6 +234,29 @@ entries:
     version: 0.0.2
   mqtt-load-checker:
   - apiVersion: v2
+    appVersion: v1.0.7
+    created: "2024-04-11T19:20:53.835424562Z"
+    description: Helm chart to deploy github.com/pablitovicente/mqtt-load-generator's
+      checker tool
+    digest: ef3d4c7083ef9b5c32fb0fdcbfed7fd4de662df7727098e0ec2bf998a0578af9
+    keywords:
+    - mqtt-load-generator
+    - mqtt-load-checkter
+    - mqtt
+    - load-generator
+    - load-checker
+    maintainers:
+    - email: pgeschke@gmail.com
+      name: pgschk
+      url: https://github.com/pgschk
+    name: mqtt-load-checker
+    sources:
+    - https://github.com/pgschk/helm-charts/tree/main/charts/mqtt-load-checker
+    type: application
+    urls:
+    - https://github.com/pgschk/helm-charts/releases/download/mqtt-load-checker-0.3.0/mqtt-load-checker-0.3.0.tgz
+    version: 0.3.0
+  - apiVersion: v2
     appVersion: v1.0.5
     created: "2023-12-13T18:10:03.151811266Z"
     description: Helm chart to deploy github.com/pablitovicente/mqtt-load-generator's
@@ -337,4 +360,4 @@ entries:
     urls:
     - https://github.com/pgschk/helm-charts/releases/download/mqtt-load-generator-0.1.0/mqtt-load-generator-0.1.0.tgz
     version: 0.1.0
-generated: "2024-04-11T19:16:52.478721039Z"
+generated: "2024-04-11T19:20:53.83547727Z"
