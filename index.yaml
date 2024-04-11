@@ -258,6 +258,26 @@ entries:
     version: 0.1.0
   mqtt-load-generator:
   - apiVersion: v2
+    appVersion: v1.0.7
+    created: "2024-04-11T19:16:52.47863115Z"
+    description: Helm chart to deploy github.com/pablitovicente/mqtt-load-generator
+    digest: e4631bb9cd6c5ab5ce21597645ff1d15289b974a7addfe186cb6c0f45f7c74d3
+    keywords:
+    - mqtt-load-generator
+    - mqtt
+    - load-generator
+    maintainers:
+    - email: pgeschke@gmail.com
+      name: pgschk
+      url: https://github.com/pgschk
+    name: mqtt-load-generator
+    sources:
+    - https://github.com/pgschk/helm-charts/tree/main/charts/mqtt-load-generator
+    type: application
+    urls:
+    - https://github.com/pgschk/helm-charts/releases/download/mqtt-load-generator-0.4.0/mqtt-load-generator-0.4.0.tgz
+    version: 0.4.0
+  - apiVersion: v2
     appVersion: v1.0.5
     created: "2023-12-12T20:39:38.715503855Z"
     description: Helm chart to deploy github.com/pablitovicente/mqtt-load-generator
@@ -317,4 +337,4 @@ entries:
     urls:
     - https://github.com/pgschk/helm-charts/releases/download/mqtt-load-generator-0.1.0/mqtt-load-generator-0.1.0.tgz
     version: 0.1.0
-generated: "2024-04-07T17:30:13.631469637Z"
+generated: "2024-04-11T19:16:52.478721039Z"
