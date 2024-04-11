@@ -15,5 +15,5 @@ keywords:
   - load-generator
   - load-checker
 
-version: 0.1.0
-appVersion: "v1.0.5"
+version: 0.3.0
+appVersion: "v1.0.7"
