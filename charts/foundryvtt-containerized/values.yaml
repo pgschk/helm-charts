@@ -83,3 +83,9 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# readinessProbeTimeout is a value in seconds after which the liveness probe will time out
+readinessProbeTimeout: 1
+
+# livenessProbeTimeout is a value in seconds after which the liveness probe will time out
+livenessProbeTimeout: 1
