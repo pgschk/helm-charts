@@ -48,10 +48,12 @@ spec:
               containerPort: 8080
               protocol: TCP
           livenessProbe:
+            timeoutSeconds: {{ .Values.livenessProbeTimeout | default 1 }}
             httpGet:
               path: /
               port: http
           readinessProbe:
+            timeoutSeconds: {{ .Values.readinessProbeTimeout | default 1 }}
             httpGet:
               path: /
               port: http
