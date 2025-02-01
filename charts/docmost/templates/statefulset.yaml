@@ -77,10 +77,15 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            - name: config
+              mountPath: /app/.env
+              subPath: .env
+            - name: data
+              mountPath: /app/data/storage
+            {{- with .Values.volumeMounts }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -93,6 +98,13 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: config
+          secret:
+            secretName: {{ include "docmost.fullname" . }}-config
+        {{- with .Values.volumes }}
+          {{- toYaml . | nindent 12 }}
+        {{- end }}
   volumeClaimTemplates:
     - metadata:
         name: data
