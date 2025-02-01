@@ -1,0 +1,104 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "docmost.fullname" . }}
+  labels:
+    {{- include "docmost.labels" . | nindent 4 }}
+spec:
+  serviceName: {{ include "docmost.fullname" . }}-headless
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "docmost.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "docmost.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: APP_URL
+              value: {{ .Values.appUrl | quote }}
+            - name: APP_SECRET
+              value: {{ (randAlphaNum 24 | nospace) | quote }}
+            - name: JWT_TOKEN_EXPIRES_IN
+              value: "30d"
+            - name: DATABASE_URL
+              value: "postgresql://{{ .Values.postgresql.auth.user }}:{{ .Values.postgresql.auth.password }}@{{ .Values.postgresql.hostname }}:5432/docmost?schema=public"
+            - name: REDIS_URL
+              value: "redis://{{ .Values.redis.hostname }}"
+            {{- with .Values.email }}
+            - name: MAIL_DRIVER
+              value: {{ .driver | quote }}
+            - name: MAIL_FROM_ADDRESS
+              value: {{ .mailFromAddress | quote }}
+            - name: MAIL_FROM_NAME
+              value: {{ .mailFromName | quote }}
+              {{- if eq .driver "smtp" }}
+            - name: SMTP_HOST
+              value: {{ .smtp.host | quote }}
+            - name: SMTP_USERNAME
+              value: {{ .smtp.username | quote }}
+            - name: SMTP_PASSWORD
+              value: {{ .smtp.password | quote }}
+            - name: SMTP_SECURE
+              value: {{ .smtp.secure | quote }}
+              {{- end -}}
+              {{- if eq .driver "postmark" }}
+            - name: token
+              value: {{ .postmark.token | quote }}
+              {{- end -}}
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: {{ .Values.persistence.size }}
