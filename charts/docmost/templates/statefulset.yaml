@@ -38,7 +38,7 @@ spec:
             - name: APP_URL
               value: {{ .Values.appUrl | quote }}
             - name: APP_SECRET
-              value: {{ (randAlphaNum 24 | nospace) | quote }}
+              value: {{ (randAlphaNum 46 | nospace) | quote }}
             - name: JWT_TOKEN_EXPIRES_IN
               value: "30d"
             - name: DATABASE_URL
