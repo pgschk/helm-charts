@@ -98,6 +98,14 @@ tolerations: []
 
 affinity: {}
 
+# probePath is the page the startup, readiness and liveness probes request.
+# With "/" (the default) the pod is also ready when the install failed (no
+# or an expired download URL): the image then serves a page explaining what
+# to do, and you can reach it. Set "/api/status" once your install works:
+# only a running Foundry answers it, so a broken install shows as not ready
+# (helm install --wait and GitOps health checks then catch it).
+probePath: /
+
 # readinessProbeTimeout is a value in seconds after which the liveness probe will time out
 readinessProbeTimeout: 1
 
