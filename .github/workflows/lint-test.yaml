@@ -35,6 +35,9 @@ jobs:
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
+          if grep -qx 'charts/foundryvtt-containerized' <<< "$changed"; then
+            echo "foundryvtt=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Run chart-testing (lint)
         if: steps.list-changed.outputs.changed == 'true'
@@ -44,6 +47,32 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
         uses: helm/kind-action@v1.8.0
 
+      # foundryvtt-containerized can't become ready in CI: that needs a timed
+      # FoundryVTT download URL. Its smoke test below checks it starts instead.
       - name: Run chart-testing (install)
         if: steps.list-changed.outputs.changed == 'true'
-        run: ct install --target-branch ${{ github.event.repository.default_branch }}
+        run: ct install --target-branch ${{ github.event.repository.default_branch }} --excluded-charts foundryvtt-containerized
+
+      # Without a download URL the container serves its instructions page:
+      # it must start (non-root, read-only root, volumes bound), answer / with
+      # 200 and /api/status with 404, and stay not ready.
+      - name: Smoke test foundryvtt-containerized
+        if: steps.list-changed.outputs.foundryvtt == 'true'
+        run: |
+          set -euo pipefail
+          helm install ci charts/foundryvtt-containerized
+          # running, not "started": that only turns true once the startup
+          # probe passes, which it can't here
+          for i in $(seq 90); do
+            [ -n "$(kubectl get pod -l app.kubernetes.io/instance=ci -o jsonpath='{.items[0].status.containerStatuses[0].state.running.startedAt}')" ] && break
+            sleep 2
+          done
+          kubectl get pod -l app.kubernetes.io/instance=ci
+          kubectl port-forward deploy/ci-foundryvtt-containerized 18080:8080 &
+          for i in $(seq 30); do curl -s -o /dev/null localhost:18080/ && break; sleep 1; done
+          test "$(curl -s -o /dev/null -w '%{http_code}' localhost:18080/)" = 200
+          test "$(curl -s -o /dev/null -w '%{http_code}' localhost:18080/api/status)" = 404
+          test "$(kubectl get pod -l app.kubernetes.io/instance=ci -o jsonpath='{.items[0].status.containerStatuses[0].ready}')" = false
+          test "$(kubectl get pod -l app.kubernetes.io/instance=ci -o jsonpath='{.items[0].status.containerStatuses[0].restartCount}')" = 0
+          echo "Instructions page served, pod not ready, no restarts"
+          kill %1

@@ -25,13 +25,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "foundryvtt-containerized.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automount }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}{{ with .Values.image.digest }}@{{ . }}{{ end }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           {{- if not (empty .Values.foundryVTTDownloadURL) }}
@@ -43,20 +44,35 @@ spec:
               mountPath: /data/foundryvtt
             - name: foundryvtt-install
               mountPath: /usr/src/app/foundryvtt
+            # the download lands here before it is unzipped
+            - name: tmp
+              mountPath: /tmp
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
-          livenessProbe:
-            timeoutSeconds: {{ .Values.livenessProbeTimeout | default 1 }}
+          # /api/status, not /: without a working Foundry install (no or an
+          # expired download URL) the image serves its instructions page on
+          # the same port, which answers / with 200 but /api/status with 404.
+          # The first start downloads and unzips Foundry before it listens.
+          startupProbe:
             httpGet:
-              path: /
+              path: /api/status
               port: http
+            periodSeconds: 10
+            failureThreshold: 60
           readinessProbe:
             timeoutSeconds: {{ .Values.readinessProbeTimeout | default 1 }}
             httpGet:
-              path: /
+              path: /api/status
               port: http
+            periodSeconds: 10
+          livenessProbe:
+            timeoutSeconds: {{ .Values.livenessProbeTimeout | default 10 }}
+            httpGet:
+              path: /api/status
+              port: http
+            periodSeconds: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
@@ -66,6 +82,10 @@ spec:
       - name: foundryvtt-install
         persistentVolumeClaim:
           claimName: {{ include "foundryvtt-containerized.fullname" . }}-install
+      # a Foundry release is about 300 MB
+      - name: tmp
+        emptyDir:
+          sizeLimit: 1Gi
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

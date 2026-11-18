@@ -7,6 +7,9 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  # Optional image digest (sha256:...), appended to the tag to pin the exact
+  # build
+  digest: ""
 
 imagePullSecrets: []
 nameOverride: ""
@@ -31,20 +34,31 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+  # Foundry doesn't talk to the Kubernetes API, so the pod gets no token
+  automount: false
 
 podAnnotations: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext:
-  # foundryvtt-containerized runs as user 1000 by default
+# foundryvtt-containerized runs as user 1000. The defaults meet the
+# "restricted" Pod Security Standard. fsGroup makes the volumes writable for
+# that user; OnRootMismatch skips the recursive chown once they are.
+podSecurityContext:
+  runAsNonRoot: true
   runAsUser: 1000
-  # runAsNonRoot: true
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
+  runAsGroup: 1000
+  fsGroup: 1000
+  fsGroupChangePolicy: OnRootMismatch
+  seccompProfile:
+    type: RuntimeDefault
+
+# The image only writes to the two volumes and /tmp (an emptyDir), so the
+# root filesystem can be read-only
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
 
 service:
   type: ClusterIP
@@ -87,5 +101,6 @@ affinity: {}
 # readinessProbeTimeout is a value in seconds after which the liveness probe will time out
 readinessProbeTimeout: 1
 
-# livenessProbeTimeout is a value in seconds after which the liveness probe will time out
-livenessProbeTimeout: 1
+# livenessProbeTimeout is a value in seconds after which the liveness probe will time out.
+# Foundry can be slow to answer while it loads a large world.
+livenessProbeTimeout: 10
